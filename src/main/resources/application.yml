@@ -1,0 +1,62 @@
+server:
+  port: 8082
+  error:
+    include-stacktrace: never
+
+telegram:
+  bot:
+    username: DemoTelegramBot
+    token: 5257989490:AAHnhX9bPjmmv31zyVjObaZu-sQvlt5-R2g
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: aroze198518@gmail.com
+    password: pbdkucxpgcfkaujy
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  datasource:
+    url: ${SQL_CONNECTION}
+    username: ${SQL_USER}
+    password: ${SQL_PASSWORD}
+
+  jpa:
+    open-in-view: false
+
+  flyway:
+    locations: classpath:sql/migration
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: telegram_authenticate_group
+      heartbeat-interval: 3000
+      enable-auto-commit: true
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-commit-interval: 5000
+      max-poll-records: 50
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers: kafka:9092
+
+    prefix:
+      telegram-message-topic: telegram-message
+      telegram-authenticate-topic: telegram-authenticate
+
+    listener:
+      ack-mode: TIME
+      concurrency: 10
+      poll-timeout: 500
+      ack-time: 5000
